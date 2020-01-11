@@ -4,6 +4,7 @@ import { Link, graphql } from 'gatsby'
 
 import Layout from '../components/Layout'
 import Features from '../components/Features'
+import Content, { HTMLContent } from '../components/Content'
 
 export const IndexPageTemplate = ({
   image,
@@ -11,9 +12,11 @@ export const IndexPageTemplate = ({
   heading,
   subheading,
   mainpitch,
-  description,
-  intro,
-}) => (
+  content,
+  contentComponent
+}) => {
+  const PageContent = contentComponent || Content
+  return (
     <div>
       <div
         className="full-width-image margin-top-0"
@@ -63,19 +66,19 @@ export const IndexPageTemplate = ({
                       <h3 className="has-text-weight-semibold is-size-2">
                         {heading}
                       </h3>
-                      <p>{description}</p>
+                      <PageContent content={content} />
                     </div>
                   </div>
                   {/* {!intro.blurbs ? null : (
                     <Features gridItems={intro.blurbs} />
                   )} */}
-                  <div className="columns">
+                  {/* <div className="columns">
                     <div className="column is-12 has-text-centered">
                       <Link className="btn" to="/products">
                         See all products
                     </Link>
                     </div>
-                  </div>
+                  </div> */}
                   {/* <div className="column is-12">
                     <h3 className="has-text-weight-semibold is-size-2">
                       Latest stories
@@ -86,7 +89,7 @@ export const IndexPageTemplate = ({
                         Read more
                     </Link>
                     </div> 
-                  </div>*/}                  
+                  </div>*/}
                 </div>
               </div>
             </div>
@@ -94,7 +97,8 @@ export const IndexPageTemplate = ({
         </div>
       </section>
     </div>
-  )
+  );
+};
 
 IndexPageTemplate.propTypes = {
   image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
@@ -102,14 +106,12 @@ IndexPageTemplate.propTypes = {
   heading: PropTypes.string,
   subheading: PropTypes.string,
   mainpitch: PropTypes.object,
-  description: PropTypes.string,
-  intro: PropTypes.shape({
-    //blurbs: PropTypes.array,
-  }),
+  content: PropTypes.string,
+  contentComponent: PropTypes.func,
 }
 
 const IndexPage = ({ data }) => {
-  const { frontmatter } = data.markdownRemark
+  const { html, frontmatter } = data.markdownRemark
 
   return (
     <Layout>
@@ -119,8 +121,8 @@ const IndexPage = ({ data }) => {
         heading={frontmatter.heading}
         subheading={frontmatter.subheading}
         mainpitch={frontmatter.mainpitch}
-        description={frontmatter.description}
-        intro={frontmatter.intro}
+        content={html}
+        contentComponent={HTMLContent}
       />
     </Layout>
   )
@@ -139,6 +141,7 @@ export default IndexPage
 export const pageQuery = graphql`
   query IndexPageTemplate {
     markdownRemark(frontmatter: { templateKey: { eq: "index-page" } }) {
+      html
       frontmatter {
         title
         image {
@@ -152,21 +155,6 @@ export const pageQuery = graphql`
         subheading
         mainpitch {
           title
-          description
-        }
-        description
-        intro {
-          # blurbs {
-          #   image {
-          #     childImageSharp {
-          #       fluid(maxWidth: 240, quality: 64) {
-          #         ...GatsbyImageSharpFluid
-          #       }
-          #     }
-          #   }
-          #   text
-          # }
-          heading
           description
         }
       }

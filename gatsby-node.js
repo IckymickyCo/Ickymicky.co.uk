@@ -3,6 +3,11 @@ const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
 const { fmImagesToRelative } = require('gatsby-remark-relative-images')
 
+exports.onCreateDevServer = ({ app }) => {
+  const fsMiddlewareAPI = require('netlify-cms-backend-fs/dist/fs')
+  fsMiddlewareAPI(app)
+}
+
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions
 
