@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: 'Ickymick Co',
+    title: 'Ickymicky Co',
     description:
-      'Website for Ickymicky Co seller of handmade craft products.',
+      'Ickymicky Co a seller of handmade items made with love.',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
