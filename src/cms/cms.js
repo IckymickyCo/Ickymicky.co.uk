@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 } else {
     config.backend = {
         "name": "github",
-        "repo": " IckymickyCo/Ickymicky.co.uk",
+        "repo": "IckymickyCo/Ickymicky.co.uk",
         "branch": "master",
         "commit_messages": {
             "create": 'Create {{collection}} “{{slug}}”',
