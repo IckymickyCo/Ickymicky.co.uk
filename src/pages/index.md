@@ -8,7 +8,7 @@ mainpitch:
     Ickymicky Co sells handmade and hand crafted products, we are not a large 
     corporate or overseas manufacture, all our items are hand made by us and 
     sold direct to you. By supporting us you are supporting an independent 
-    maker bring there items to the world.
+    maker bring their items to the world.
   title: Why Ickymicky Co
 heading: Great makes with love
 ---
