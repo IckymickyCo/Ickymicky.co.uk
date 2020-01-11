@@ -7,7 +7,8 @@ import Testimonials from '../components/Testimonials'
 import Pricing from '../components/Pricing'
 import PreviewCompatibleImage from '../components/PreviewCompatibleImage'
 
-export const ProductPageTemplate = ({
+export const ProductListPageTemplate = ({
+  image,
   title,
   heading,
   description,
@@ -17,70 +18,88 @@ export const ProductPageTemplate = ({
   fullImage,
   pricing,
 }) => (
-    <div className="content">
-
+  <div className="content">
+    <div
+      className="full-width-image-container margin-top-0 hero-title"
+      style={{
+        backgroundImage: `url(${
+          !!image.childImageSharp ? image.childImageSharp.fluid.src : image
+        })`,
+      }}
+    >
       <h2
         className="has-text-weight-bold is-size-1 "
       >
         {title}
       </h2>
-      <section className="section section--gradient">
-        <div className="container">
-          <div className="section">
-            <div className="columns">
-              <div className="column is-7 is-offset-1">
-                <h3 className="has-text-weight-semibold is-size-2">{heading}</h3>
-                <p>{description}</p>
-              </div>
+    </div>
+    <section className="section section--gradient">
+      <div className="container">
+        <div className="section">
+          <div className="columns">
+            <div className="column is-7 is-offset-1">
+              <h3 className="has-text-weight-semibold is-size-2">{heading}</h3>
+              <p>{description}</p>
             </div>
-            <div className="columns">
-              <div className="column is-10 is-offset-1">
-                <Features gridItems={intro.blurbs} />
-                <div className="columns">
-                  <div className="column is-7">
-                    <h3 className="has-text-weight-semibold is-size-3">
-                      {main.heading}
-                    </h3>
-                    <p>{main.description}</p>
-                  </div>
+          </div>
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              <Features gridItems={intro.blurbs} />
+              <div className="columns">
+                <div className="column is-7">
+                  <h3 className="has-text-weight-semibold is-size-3">
+                    {main.heading}
+                  </h3>
+                  <p>{main.description}</p>
                 </div>
-                <div className="tile is-ancestor">
-                  <div className="tile is-vertical">
-                    <div className="tile">
-                      <div className="tile is-parent is-vertical">
-                        <article className="tile is-child">
-                          <PreviewCompatibleImage imageInfo={main.image1} />
-                        </article>
-                      </div>
-                      <div className="tile is-parent">
-                        <article className="tile is-child">
-                          <PreviewCompatibleImage imageInfo={main.image2} />
-                        </article>
-                      </div>
+              </div>
+              <div className="tile is-ancestor">
+                <div className="tile is-vertical">
+                  <div className="tile">
+                    <div className="tile is-parent is-vertical">
+                      <article className="tile is-child">
+                        <PreviewCompatibleImage imageInfo={main.image1} />
+                      </article>
                     </div>
                     <div className="tile is-parent">
                       <article className="tile is-child">
-                        <PreviewCompatibleImage imageInfo={main.image3} />
+                        <PreviewCompatibleImage imageInfo={main.image2} />
                       </article>
                     </div>
                   </div>
+                  <div className="tile is-parent">
+                    <article className="tile is-child">
+                      <PreviewCompatibleImage imageInfo={main.image3} />
+                    </article>
+                  </div>
                 </div>
-                <Testimonials testimonials={testimonials} />
-                
-                <h2 className="has-text-weight-semibold is-size-2">
-                  {pricing.heading}
-                </h2>
-                <p className="is-size-5">{pricing.description}</p>
-                <Pricing data={pricing.plans} />
               </div>
+              <Testimonials testimonials={testimonials} />
+              <div
+                className="full-width-image-container"
+                style={{
+                  backgroundImage: `url(${
+                    fullImage.childImageSharp
+                      ? fullImage.childImageSharp.fluid.src
+                      : fullImage
+                  })`,
+                }}
+              />
+              <h2 className="has-text-weight-semibold is-size-2">
+                {pricing.heading}
+              </h2>
+              <p className="is-size-5">{pricing.description}</p>
+              <Pricing data={pricing.plans} />
             </div>
           </div>
         </div>
-      </section>
-    </div>
-  )
+      </div>
+    </section>
+  </div>
+)
 
-ProductPageTemplate.propTypes = {
+ProductListPageTemplate.propTypes = {
+  image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   title: PropTypes.string,
   heading: PropTypes.string,
   description: PropTypes.string,
@@ -95,6 +114,7 @@ ProductPageTemplate.propTypes = {
     image3: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   }),
   testimonials: PropTypes.array,
+  fullImage: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   pricing: PropTypes.shape({
     heading: PropTypes.string,
     description: PropTypes.string,
@@ -102,25 +122,27 @@ ProductPageTemplate.propTypes = {
   }),
 }
 
-const ProductPage = ({ data }) => {
+const ProductListPage = ({ data }) => {
   const { frontmatter } = data.markdownRemark
 
   return (
     <Layout>
-      <ProductPageTemplate
+      <ProductListPageTemplate
+        image={frontmatter.image}
         title={frontmatter.title}
         heading={frontmatter.heading}
         description={frontmatter.description}
         intro={frontmatter.intro}
         main={frontmatter.main}
         testimonials={frontmatter.testimonials}
+        fullImage={frontmatter.full_image}
         pricing={frontmatter.pricing}
       />
     </Layout>
   )
 }
 
-ProductPage.propTypes = {
+ProductListPage.propTypes = {
   data: PropTypes.shape({
     markdownRemark: PropTypes.shape({
       frontmatter: PropTypes.object,
@@ -128,14 +150,20 @@ ProductPage.propTypes = {
   }),
 }
 
-export default ProductPage
+export default ProductListPage
 
-export const productPageQuery = graphql`
-  query ProductPage($id: String!) {
+export const productListPageQuery = graphql`
+  query ProductListPage($id: String!) {
     markdownRemark(id: { eq: $id }) {
       frontmatter {
         title
-       
+        image {
+          childImageSharp {
+            fluid(maxWidth: 2048, quality: 100) {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
         heading
         description
         intro {
@@ -190,7 +218,13 @@ export const productPageQuery = graphql`
           author
           quote
         }
-        
+        full_image {
+          childImageSharp {
+            fluid(maxWidth: 2048, quality: 100) {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
         pricing {
           heading
           description

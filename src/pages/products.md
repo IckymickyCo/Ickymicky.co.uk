@@ -1,8 +1,8 @@
 ---
-templateKey: 'product-page'
+templateKey: 'product-list-page'
 path: /products
-title: Our 
-image: /img/jumbotron.jpg
+title: 'Our products'
+image: "/img/spool-of-purple-thread.jpg"
 heading: Great coffee with a conscience
 description: >-
   Kaldi is the ultimate spot for coffee lovers who want to learn about their
