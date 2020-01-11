@@ -21,17 +21,15 @@ if (process.env.NODE_ENV === 'development') {
     CMS.registerBackend('file-system', FileSystemBackend)
 } else {
     config.backend = {
-        "backend": {
-            "name": "github",
-            "repo": " IckymickyCo/Ickymicky.co.uk",
-            "branch": "master",
-            "commit_messages": {
-                "create": 'Create {{collection}} “{{slug}}”',
-                "update": 'Update {{collection}} “{{slug}}”',
-                "delete": 'Delete {{collection}} “{{slug}}”',
-                "uploadMedia": '[skip ci] Upload “{{path}}”',
-                "deleteMedia": '[skip ci] Delete “{{path}}”'
-            }
+        "name": "github",
+        "repo": " IckymickyCo/Ickymicky.co.uk",
+        "branch": "master",
+        "commit_messages": {
+            "create": 'Create {{collection}} “{{slug}}”',
+            "update": 'Update {{collection}} “{{slug}}”',
+            "delete": 'Delete {{collection}} “{{slug}}”',
+            "uploadMedia": '[skip ci] Upload “{{path}}”',
+            "deleteMedia": '[skip ci] Delete “{{path}}”'
         }
     }
 }
